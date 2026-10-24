@@ -1,0 +1,194 @@
+[
+  {
+    "id": 0,
+    "letter": "ا",
+    "codepoint": "U+0627",
+    "transliteration": "alef"
+  },
+  {
+    "id": 1,
+    "letter": "ب",
+    "codepoint": "U+0628",
+    "transliteration": "beh"
+  },
+  {
+    "id": 2,
+    "letter": "پ",
+    "codepoint": "U+067E",
+    "transliteration": "peh"
+  },
+  {
+    "id": 3,
+    "letter": "ت",
+    "codepoint": "U+062A",
+    "transliteration": "teh"
+  },
+  {
+    "id": 4,
+    "letter": "ث",
+    "codepoint": "U+062B",
+    "transliteration": "seh"
+  },
+  {
+    "id": 5,
+    "letter": "ج",
+    "codepoint": "U+062C",
+    "transliteration": "jim"
+  },
+  {
+    "id": 6,
+    "letter": "چ",
+    "codepoint": "U+0686",
+    "transliteration": "cheh"
+  },
+  {
+    "id": 7,
+    "letter": "ح",
+    "codepoint": "U+062D",
+    "transliteration": "heh-jimi"
+  },
+  {
+    "id": 8,
+    "letter": "خ",
+    "codepoint": "U+062E",
+    "transliteration": "kheh"
+  },
+  {
+    "id": 9,
+    "letter": "د",
+    "codepoint": "U+062F",
+    "transliteration": "dal"
+  },
+  {
+    "id": 10,
+    "letter": "ذ",
+    "codepoint": "U+0630",
+    "transliteration": "zal"
+  },
+  {
+    "id": 11,
+    "letter": "ر",
+    "codepoint": "U+0631",
+    "transliteration": "reh"
+  },
+  {
+    "id": 12,
+    "letter": "ز",
+    "codepoint": "U+0632",
+    "transliteration": "zeh"
+  },
+  {
+    "id": 13,
+    "letter": "ژ",
+    "codepoint": "U+0698",
+    "transliteration": "zheh"
+  },
+  {
+    "id": 14,
+    "letter": "س",
+    "codepoint": "U+0633",
+    "transliteration": "sin"
+  },
+  {
+    "id": 15,
+    "letter": "ش",
+    "codepoint": "U+0634",
+    "transliteration": "shin"
+  },
+  {
+    "id": 16,
+    "letter": "ص",
+    "codepoint": "U+0635",
+    "transliteration": "sad"
+  },
+  {
+    "id": 17,
+    "letter": "ض",
+    "codepoint": "U+0636",
+    "transliteration": "zad"
+  },
+  {
+    "id": 18,
+    "letter": "ط",
+    "codepoint": "U+0637",
+    "transliteration": "ta"
+  },
+  {
+    "id": 19,
+    "letter": "ظ",
+    "codepoint": "U+0638",
+    "transliteration": "za"
+  },
+  {
+    "id": 20,
+    "letter": "ع",
+    "codepoint": "U+0639",
+    "transliteration": "eyn"
+  },
+  {
+    "id": 21,
+    "letter": "غ",
+    "codepoint": "U+063A",
+    "transliteration": "gheyn"
+  },
+  {
+    "id": 22,
+    "letter": "ف",
+    "codepoint": "U+0641",
+    "transliteration": "feh"
+  },
+  {
+    "id": 23,
+    "letter": "ق",
+    "codepoint": "U+0642",
+    "transliteration": "qaf"
+  },
+  {
+    "id": 24,
+    "letter": "ک",
+    "codepoint": "U+06A9",
+    "transliteration": "kaf"
+  },
+  {
+    "id": 25,
+    "letter": "گ",
+    "codepoint": "U+06AF",
+    "transliteration": "gaf"
+  },
+  {
+    "id": 26,
+    "letter": "ل",
+    "codepoint": "U+0644",
+    "transliteration": "lam"
+  },
+  {
+    "id": 27,
+    "letter": "م",
+    "codepoint": "U+0645",
+    "transliteration": "mim"
+  },
+  {
+    "id": 28,
+    "letter": "ن",
+    "codepoint": "U+0646",
+    "transliteration": "nun"
+  },
+  {
+    "id": 29,
+    "letter": "و",
+    "codepoint": "U+0648",
+    "transliteration": "vav"
+  },
+  {
+    "id": 30,
+    "letter": "ه",
+    "codepoint": "U+0647",
+    "transliteration": "heh"
+  },
+  {
+    "id": 31,
+    "letter": "ی",
+    "codepoint": "U+06CC",
+    "transliteration": "yeh"
+  }
+]

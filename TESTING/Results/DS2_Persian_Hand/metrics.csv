@@ -1,0 +1,2 @@
+﻿condition,images,correct,incorrect_or_rejected,accuracy_percent,macro_precision_percent,macro_recall_percent,macro_f1_percent,accepted_percent,rejection_percent,accepted_only_accuracy_percent,technical_errors
+unmodified,32000,838,31162,2.61875,67.73701149162218,2.61875,4.675279664944886,3.534375,96.465625,74.09372236958444,0

@@ -1,0 +1,384 @@
+{
+  "dataset": "DS2_Persian_Hand",
+  "folder": "C:\\Users\\Jeff Barrientos\\Downloads\\DS2_Persian_Hand",
+  "image_root": "C:\\Users\\Jeff Barrientos\\Downloads\\DS2_Persian_Hand",
+  "run_status": "complete",
+  "modified": false,
+  "overall": {
+    "images": 32000,
+    "correct": 838,
+    "incorrect_or_rejected": 31162,
+    "accuracy_percent": 2.61875,
+    "macro_precision_percent": 67.73701149162218,
+    "macro_recall_percent": 2.61875,
+    "macro_f1_percent": 4.675279664944886,
+    "accepted_percent": 3.534375,
+    "rejection_percent": 96.465625,
+    "accepted_only_accuracy_percent": 74.09372236958444,
+    "technical_errors": 0,
+    "status_counts": {
+      "low_confidence": 11533,
+      "no_detection": 19143,
+      "accepted": 1131,
+      "multiple_detections": 193
+    }
+  },
+  "conditions": [
+    {
+      "condition": "unmodified",
+      "images": 32000,
+      "correct": 838,
+      "incorrect_or_rejected": 31162,
+      "accuracy_percent": 2.61875,
+      "macro_precision_percent": 67.73701149162218,
+      "macro_recall_percent": 2.61875,
+      "macro_f1_percent": 4.675279664944886,
+      "accepted_percent": 3.534375,
+      "rejection_percent": 96.465625,
+      "accepted_only_accuracy_percent": 74.09372236958444,
+      "technical_errors": 0
+    }
+  ],
+  "per_letter": [
+    {
+      "label_id": 0,
+      "letter": "alef",
+      "character": "ا",
+      "images": 1000,
+      "correct": 39,
+      "precision_percent": 95.1219512195122,
+      "recall_percent": 3.9,
+      "f1_percent": 7.492795389048991
+    },
+    {
+      "label_id": 1,
+      "letter": "beh",
+      "character": "ب",
+      "images": 1000,
+      "correct": 2,
+      "precision_percent": 100.0,
+      "recall_percent": 0.2,
+      "f1_percent": 0.39920159680638717
+    },
+    {
+      "label_id": 2,
+      "letter": "peh",
+      "character": "پ",
+      "images": 1000,
+      "correct": 4,
+      "precision_percent": 100.0,
+      "recall_percent": 0.4,
+      "f1_percent": 0.796812749003984
+    },
+    {
+      "label_id": 3,
+      "letter": "teh",
+      "character": "ت",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 4,
+      "letter": "seh",
+      "character": "ث",
+      "images": 1000,
+      "correct": 6,
+      "precision_percent": 85.71428571428571,
+      "recall_percent": 0.6,
+      "f1_percent": 1.1916583912611718
+    },
+    {
+      "label_id": 5,
+      "letter": "jim",
+      "character": "ج",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 6,
+      "letter": "cheh",
+      "character": "چ",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 7,
+      "letter": "heh-jimi",
+      "character": "ح",
+      "images": 1000,
+      "correct": 156,
+      "precision_percent": 61.417322834645674,
+      "recall_percent": 15.6,
+      "f1_percent": 24.880382775119617
+    },
+    {
+      "label_id": 8,
+      "letter": "kheh",
+      "character": "خ",
+      "images": 1000,
+      "correct": 2,
+      "precision_percent": 100.0,
+      "recall_percent": 0.2,
+      "f1_percent": 0.39920159680638717
+    },
+    {
+      "label_id": 9,
+      "letter": "dal",
+      "character": "د",
+      "images": 1000,
+      "correct": 58,
+      "precision_percent": 47.540983606557376,
+      "recall_percent": 5.800000000000001,
+      "f1_percent": 10.33868092691622
+    },
+    {
+      "label_id": 10,
+      "letter": "zal",
+      "character": "ذ",
+      "images": 1000,
+      "correct": 11,
+      "precision_percent": 91.66666666666666,
+      "recall_percent": 1.0999999999999999,
+      "f1_percent": 2.1739130434782608
+    },
+    {
+      "label_id": 11,
+      "letter": "reh",
+      "character": "ر",
+      "images": 1000,
+      "correct": 5,
+      "precision_percent": 100.0,
+      "recall_percent": 0.5,
+      "f1_percent": 0.9950248756218907
+    },
+    {
+      "label_id": 12,
+      "letter": "zeh",
+      "character": "ز",
+      "images": 1000,
+      "correct": 3,
+      "precision_percent": 100.0,
+      "recall_percent": 0.3,
+      "f1_percent": 0.5982053838484547
+    },
+    {
+      "label_id": 13,
+      "letter": "zheh",
+      "character": "ژ",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 14,
+      "letter": "sin",
+      "character": "س",
+      "images": 1000,
+      "correct": 23,
+      "precision_percent": 32.857142857142854,
+      "recall_percent": 2.3,
+      "f1_percent": 4.299065420560747
+    },
+    {
+      "label_id": 15,
+      "letter": "shin",
+      "character": "ش",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 16,
+      "letter": "sad",
+      "character": "ص",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 17,
+      "letter": "zad",
+      "character": "ض",
+      "images": 1000,
+      "correct": 0,
+      "precision_percent": 0.0,
+      "recall_percent": 0.0,
+      "f1_percent": 0.0
+    },
+    {
+      "label_id": 18,
+      "letter": "ta",
+      "character": "ط",
+      "images": 1000,
+      "correct": 109,
+      "precision_percent": 92.37288135593221,
+      "recall_percent": 10.9,
+      "f1_percent": 19.499105545617173
+    },
+    {
+      "label_id": 19,
+      "letter": "za",
+      "character": "ظ",
+      "images": 1000,
+      "correct": 20,
+      "precision_percent": 100.0,
+      "recall_percent": 2.0,
+      "f1_percent": 3.9215686274509802
+    },
+    {
+      "label_id": 20,
+      "letter": "eyn",
+      "character": "ع",
+      "images": 1000,
+      "correct": 71,
+      "precision_percent": 72.44897959183673,
+      "recall_percent": 7.1,
+      "f1_percent": 12.932604735883423
+    },
+    {
+      "label_id": 21,
+      "letter": "gheyn",
+      "character": "غ",
+      "images": 1000,
+      "correct": 9,
+      "precision_percent": 64.28571428571429,
+      "recall_percent": 0.8999999999999999,
+      "f1_percent": 1.7751479289940826
+    },
+    {
+      "label_id": 22,
+      "letter": "feh",
+      "character": "ف",
+      "images": 1000,
+      "correct": 16,
+      "precision_percent": 94.11764705882352,
+      "recall_percent": 1.6,
+      "f1_percent": 3.146509341199607
+    },
+    {
+      "label_id": 23,
+      "letter": "qaf",
+      "character": "ق",
+      "images": 1000,
+      "correct": 4,
+      "precision_percent": 100.0,
+      "recall_percent": 0.4,
+      "f1_percent": 0.796812749003984
+    },
+    {
+      "label_id": 24,
+      "letter": "kaf",
+      "character": "ک",
+      "images": 1000,
+      "correct": 31,
+      "precision_percent": 47.69230769230769,
+      "recall_percent": 3.1,
+      "f1_percent": 5.821596244131456
+    },
+    {
+      "label_id": 25,
+      "letter": "gaf",
+      "character": "گ",
+      "images": 1000,
+      "correct": 3,
+      "precision_percent": 100.0,
+      "recall_percent": 0.3,
+      "f1_percent": 0.5982053838484547
+    },
+    {
+      "label_id": 26,
+      "letter": "lam",
+      "character": "ل",
+      "images": 1000,
+      "correct": 173,
+      "precision_percent": 100.0,
+      "recall_percent": 17.299999999999997,
+      "f1_percent": 29.49701619778346
+    },
+    {
+      "label_id": 27,
+      "letter": "mim",
+      "character": "م",
+      "images": 1000,
+      "correct": 39,
+      "precision_percent": 97.5,
+      "recall_percent": 3.9,
+      "f1_percent": 7.5
+    },
+    {
+      "label_id": 28,
+      "letter": "nun",
+      "character": "ن",
+      "images": 1000,
+      "correct": 11,
+      "precision_percent": 100.0,
+      "recall_percent": 1.0999999999999999,
+      "f1_percent": 2.1760633036597428
+    },
+    {
+      "label_id": 29,
+      "letter": "vav",
+      "character": "و",
+      "images": 1000,
+      "correct": 10,
+      "precision_percent": 90.9090909090909,
+      "recall_percent": 1.0,
+      "f1_percent": 1.9782393669634024
+    },
+    {
+      "label_id": 30,
+      "letter": "heh",
+      "character": "ه",
+      "images": 1000,
+      "correct": 2,
+      "precision_percent": 100.0,
+      "recall_percent": 0.2,
+      "f1_percent": 0.39920159680638717
+    },
+    {
+      "label_id": 31,
+      "letter": "yeh",
+      "character": "ی",
+      "images": 1000,
+      "correct": 31,
+      "precision_percent": 93.93939393939394,
+      "recall_percent": 3.1,
+      "f1_percent": 6.001936108422071
+    }
+  ],
+  "model": {
+    "checkpoint": "C:\\Users\\Jeff Barrientos\\Documents\\Codex\\2026-10-24\\hek\\outputs\\Persian OCR Test Set\\yolo11n.pt",
+    "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab",
+    "labels_sha256": "ba8483c682099bb42257ca8ab415b08c6f5cd4e0589d2cb201e133fcec38e0e1",
+    "policy": {
+      "candidate_floor": 0.03,
+      "acceptance_threshold": 0.8,
+      "nms_iou": 0.4,
+      "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab"
+    },
+    "torch": "2.14.1+cu130",
+    "ultralytics": "8.4.172",
+    "device": "0",
+    "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "precision": "FP32",
+    "batch_size": 32,
+    "started_at": "2026-10-25T00:30:27.441013+08:00"
+  },
+  "training_independence": "Not established from the available provenance.",
+  "elapsed_seconds": 166.487
+}

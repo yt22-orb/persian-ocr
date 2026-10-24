@@ -1,0 +1,7 @@
+Runs/
+.venv/
+__pycache__/
+*.pt
+*.pth
+*.onnx
+~$*.docx
