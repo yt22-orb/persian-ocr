@@ -14,131 +14,135 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <main id="main-content" class="app" aria-live="polite">
-    <section class="screen screen--active" data-screen="home" aria-labelledby="home-title">
-      <header class="screen__header"><h1 id="home-title">Home</h1></header>
+  <section class="screen screen--active" data-screen="home" aria-labelledby="home-title">
+      <header class="screen__header"><h1 id="home-title">Persian Letter Scanner</h1></header>
       <div class="checker checker--top" aria-hidden="true"></div>
       <div class="checker checker--bottom" aria-hidden="true"></div>
       <div class="screen__body home-body">
-        <p class="eyebrow">Persian letter scanner</p>
-        <h2>What would you like to scan?</h2>
-        <p class="lead">Take or upload a clear photo of one isolated Persian letter.</p>
-
-        <div class="choice-grid">
-          <button class="choice-card" type="button" data-action="open-camera">
-            <span class="choice-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" role="img"><path d="M18 20h8l4-6h8l4 6h6a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6h2Z"/><circle cx="32" cy="37" r="10"/></svg>
-            </span>
-            <span>Take a photo</span>
-          </button>
-
-          <button class="choice-card" type="button" data-action="open-upload">
-            <span class="choice-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" role="img"><rect x="10" y="10" width="44" height="44" rx="5"/><circle cx="23" cy="24" r="4"/><path d="m14 47 12-12 8 8 7-7 9 11"/></svg>
-            </span>
-            <span>Upload image</span>
-          </button>
-        </div>
-
+        <h2 class="lead">What would you like to scan?</h2>
+        <p class="tip">Take or upload a clear photo of one isolated Persian letter.</p>
         <p class="tip"><strong>Best results:</strong> use even lighting and keep every dot visible.</p>
-      </div>
-    </section>
 
-    <section class="screen" data-screen="capture" aria-labelledby="capture-title" hidden>
-      <header class="screen__header"><h1 id="capture-title">Capture photo</h1></header>
-      <div class="checker checker--top" aria-hidden="true"></div>
-      <div class="checker checker--bottom" aria-hidden="true"></div>
-      <div class="screen__body input-body">
-        <div class="camera-frame">
-          <video id="camera" autoplay muted playsinline aria-label="Camera preview"></video>
-          <div class="camera-placeholder" id="camera-placeholder">
-            <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 20h8l4-6h8l4 6h6a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6h2Z"/><circle cx="32" cy="37" r="10"/></svg>
-            <span>Starting camera…</span>
+         <div class="workspace">
+          <div class="panel panel--input">
+            <div class="tabs" role="tablist" aria-label="Photo source">
+              <button class="tab tab--active" id="tab-camera" type="button" role="tab" aria-selected="true" aria-controls="camera-pane" data-action="open-camera">
+                <svg class="tab__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 20h8l4-6h8l4 6h6a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6h2Z"/><circle cx="32" cy="37" r="10"/></svg>
+                Camera
+              </button>
+              <button class="tab" id="tab-upload" type="button" role="tab" aria-selected="false" aria-controls="upload-pane" data-action="open-upload">
+                <svg class="tab__icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="10" width="44" height="44" rx="5"/><circle cx="23" cy="24" r="4"/><path d="m14 47 12-12 8 8 7-7 9 11"/></svg>
+                Upload
+              </button>
+            </div>
+
+            <div class="pane" id="camera-pane" role="tabpanel" aria-labelledby="tab-camera">
+              <div class="camera-frame">
+                <video id="camera" autoplay muted playsinline aria-label="Camera preview"></video>
+                <div class="camera-placeholder" id="camera-placeholder" hidden>
+                  <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 20h8l4-6h8l4 6h6a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6h2Z"/><circle cx="32" cy="37" r="10"/></svg>
+                  <span>Starting camera…</span>
+                </div>
+                <div class="guide-box" aria-hidden="true"></div>
+                <p class="instruction">Place one complete letter within the guide box.
+                </p>
+              </div>
+              <button class="button button--primary" id="capture-button" type="button" data-action="capture" disabled>Capture</button>
+              <canvas id="capture-canvas" hidden></canvas>
+            </div>
+
+            <div class="pane" id="upload-pane" role="tabpanel" aria-labelledby="tab-upload" hidden>
+              <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-describedby="upload-help">
+                <div class="drop-zone__preview" id="upload-thumbnail" aria-hidden="true">
+                  <svg viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="5"/><circle cx="23" cy="24" r="4"/><path d="m14 47 12-12 8 8 7-7 9 11"/></svg>
+                </div>
+                <p id="upload-help"><strong>Drag and drop here.</strong><br>PNG or JPG files only.</p>
+                <span class="or">or</span>
+                <span class="button button--small" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3V6Z"/></svg>
+                  Select Files
+                </span>
+                <input id="file-input" type="file" accept="image/png,image/jpeg" hidden>
+              </div>
+              <p class="file-name" id="file-name" aria-live="polite">No image selected</p>
+            </div>
           </div>
-          <div class="guide-box" aria-hidden="true"></div>
-        </div>
-        <p class="instruction">Place one complete letter within the guide box.</p>
-        <div class="action-row">
-          <button class="button button--secondary" type="button" data-action="home">
-            <span aria-hidden="true">←</span> Return
-          </button>
-          <button class="button button--primary" id="capture-button" type="button" data-action="capture" disabled>
-            Capture <span aria-hidden="true">→</span>
-          </button>
-        </div>
-        <canvas id="capture-canvas" hidden></canvas>
-      </div>
-    </section>
 
-    <section class="screen" data-screen="upload" aria-labelledby="upload-title" hidden>
-      <header class="screen__header"><h1 id="upload-title">Upload image</h1></header>
-      <div class="checker checker--top" aria-hidden="true"></div>
-      <div class="checker checker--bottom" aria-hidden="true"></div>
-      <div class="screen__body input-body">
-        <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-describedby="upload-help">
-          <div class="drop-zone__preview" id="upload-thumbnail" aria-hidden="true">
-            <svg viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="5"/><circle cx="23" cy="24" r="4"/><path d="m14 47 12-12 8 8 7-7 9 11"/></svg>
+          <div class="panel panel--preview">
+            <div class="panel__head">
+              <h2 id="preview-title">Preview</h2>
+              <div class="panel__tools">
+                <button class="button button--secondary button--tool" id="flip-button" type="button" data-action="flip">Flip</button>
+                <button class="button button--secondary button--tool" id="clear-button" type="button" data-action="clear">Clear</button>
+              </div>
+            </div>
+            <div class="preview-frame">
+              <div class="preview-empty">
+                <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="10" width="44" height="44" rx="5"/><circle cx="23" cy="24" r="4"/><path d="m14 47 12-12 8 8 7-7 9 11"/></svg>
+                <p>No image yet</p>
+              </div>
+              <img id="preview-image" alt="Selected Persian letter">
+            </div>
+            <button class="button button--primary" type="button" data-action="scan">Recognize</button>
           </div>
-          <p id="upload-help"><strong>Drag and drop here.</strong><br>PNG or JPG files only.</p>
-          <span class="or">or</span>
-          <span class="button button--small" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3V6Z"/></svg>
-            Select files
-          </span>
-          <input id="file-input" type="file" accept="image/png,image/jpeg" hidden>
-        </div>
-        <p class="file-name" id="file-name" aria-live="polite">No image selected</p>
-        <div class="action-row">
-          <button class="button button--secondary" type="button" data-action="home">
-            <span aria-hidden="true">←</span> Return
-          </button>
-          <button class="button button--primary" id="upload-button" type="button" data-action="confirm-upload" disabled>
-            Upload <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="screen" data-screen="preview" aria-labelledby="preview-title" hidden>
-      <header class="screen__header"><h1 id="preview-title">Preview</h1></header>
-      <div class="checker checker--top" aria-hidden="true"></div>
-      <div class="checker checker--bottom" aria-hidden="true"></div>
-      <div class="screen__body preview-body">
-        <div class="preview-frame">
-          <img id="preview-image" alt="Selected Persian letter">
-        </div>
-        <p class="instruction">Make sure only one complete Persian letter is visible.</p>
-        <div class="action-row">
-          <button class="button button--secondary" type="button" data-action="retake">
-            <span aria-hidden="true">←</span> Retake
-          </button>
-          <button class="button button--primary" type="button" data-action="scan">
-            Scan
-            <svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>
-          </button>
+          
         </div>
       </div>
     </section>
 
     <section class="screen" data-screen="result" aria-labelledby="result-title" hidden>
-      <header class="screen__header"><h1 id="result-title">Result</h1></header>
+      <header class="screen__header"><h1 id="result-title">Persian Letter Scanner Results</h1></header>
       <div class="checker checker--top" aria-hidden="true"></div>
       <div class="checker checker--bottom" aria-hidden="true"></div>
       <div class="screen__body result-body">
-        <h2>The model detected:</h2>
-        <div class="result-card">
-          <span class="result-letter" id="result-letter" lang="fa" dir="rtl">ت</span>
-          <span class="result-name" id="result-name">[teh]</span>
-          <span class="result-confidence" id="result-confidence">Confidence 99.0%</span>
-        </div>
-        <div class="action-row">
-          <button class="button button--primary" type="button" data-action="copy">
-            <svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h8v2M3 17V6a2 2 0 0 1 2-2h1"/></svg>
-            Copy text
-          </button>
-          <button class="button button--primary" type="button" data-action="home">
-            <span class="try-another" aria-hidden="true">↻</span> Try another
-          </button>
+        <div class="result-layout">
+          <div class="result-main">
+            <div class="result-summary">
+              <figure class="result-photo"><img id="result-image" alt="Your scanned letter"></figure>
+
+              <div class="result-card">
+                <span class="result-glyph"><span class="result-letter" id="result-letter" lang="fa" dir="rtl">ت</span></span>
+                <div class="result-info">
+                  <span class="result-name" id="result-name">Teh</span>
+                  <span class="result-confidence__label">Confidence:</span>
+                  <div class="confidence">
+                    <div class="confidence-bar"><span class="confidence-bar__fill"></span></div>
+                    <span class="result-confidence" id="result-confidence">67.0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <section class="matches" aria-labelledby="matches-title">
+              <h2 id="matches-title">Possible Matches</h2>
+              <ol class="matches-list" id="matches-list">
+                <li class="match"><span class="match__letter" lang="fa" dir="rtl">ت</span><span class="match__name">Teh</span><span class="match__score">67.0%</span></li>
+                <li class="match"><span class="match__letter" lang="fa" dir="rtl">ت</span><span class="match__name">Teh</span><span class="match__score">67.0%</span></li>
+                <li class="match"><span class="match__letter" lang="fa" dir="rtl">ت</span><span class="match__name">Teh</span><span class="match__score">67.0%</span></li>
+                <li class="match"><span class="match__letter" lang="fa" dir="rtl">ت</span><span class="match__name">Teh</span><span class="match__score">67.0%</span></li>
+              </ol>
+            </section>
+
+            <div class="action-row result-actions">
+              <button class="button button--primary" type="button" data-action="copy">
+                <svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h8v2M3 17V6a2 2 0 0 1 2-2h1"/></svg>
+                Copy Text
+              </button>
+              <button class="button button--secondary button--alphabet" type="button" data-action="open-alphabet" aria-controls="alphabet-panel">
+                <svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg>
+                Alphabet
+              </button>
+              <button class="button button--secondary" type="button" data-action="home">
+                <span class="try-another" aria-hidden="true">↻</span> Try Again
+              </button>
+            </div>
+          </div>
+
+          <div class="sheet-backdrop" data-action="close-alphabet"></div>
+          <aside class="alphabet-panel" id="alphabet-panel" aria-labelledby="alphabet-title">
+            <h2 id="alphabet-title">Persian Alphabet</h2>
+            <ol class="alphabet-grid" id="alphabet-grid"></ol>
+          </aside>
         </div>
       </div>
     </section>
@@ -152,7 +156,7 @@
     </div>
   </div>
 
-  <div class="modal-backdrop" id="error-modal" role="alertdialog" aria-modal="true" aria-labelledby="error-title" aria-describedby="error-message" hidden>
+  <div class="modal-backdrop" id="error-modal" role="alertdialog" aria-modal="true" aria-labelledby="error-title" aria-describedby="error-message" data-mode="close" hidden>
     <div class="modal-card modal-card--error">
       <button class="modal-close" type="button" data-action="close-error" aria-label="Close error">×</button>
       <div class="warning-icon" aria-hidden="true">!</div>
@@ -160,7 +164,11 @@
       <p id="error-message">Please try again with a clearer picture.</p>
       <div class="modal-actions">
         <button class="button button--primary" type="button" data-action="retake">
-          <span aria-hidden="true">↻</span> Try again
+          <svg class="button__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 20h8l4-6h8l4 6h6a6 6 0 0 1 6 6v22a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6h2Z"/><circle cx="32" cy="37" r="10"/></svg>
+          Retake
+        </button>
+        <button class="button button--primary" type="button" data-action="retry">
+          <span aria-hidden="true">↻</span> Try Again
         </button>
         <button class="button button--primary" type="button" data-action="home">
           <span aria-hidden="true">⌂</span> Home
