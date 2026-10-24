@@ -1,0 +1,6 @@
+{
+  "candidate_floor": 0.03,
+  "acceptance_threshold": 0.8,
+  "nms_iou": 0.4,
+  "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab"
+}

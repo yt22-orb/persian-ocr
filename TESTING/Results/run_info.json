@@ -1,0 +1,18 @@
+{
+  "checkpoint": "C:\\Users\\Jeff Barrientos\\Documents\\Codex\\2026-10-24\\hek\\outputs\\Persian OCR Test Set\\yolo11n.pt",
+  "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab",
+  "labels_sha256": "ba8483c682099bb42257ca8ab415b08c6f5cd4e0589d2cb201e133fcec38e0e1",
+  "policy": {
+    "candidate_floor": 0.03,
+    "acceptance_threshold": 0.8,
+    "nms_iou": 0.4,
+    "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab"
+  },
+  "torch": "2.14.1+cu130",
+  "ultralytics": "8.4.172",
+  "device": "0",
+  "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "precision": "FP32",
+  "batch_size": 32,
+  "started_at": "2026-10-25T00:30:27.441013+08:00"
+}
