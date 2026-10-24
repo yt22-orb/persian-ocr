@@ -89,6 +89,11 @@ def predict_crop_pipeline(detector, classifier, image, policy, device='cpu'):
         scores = classifier(tensor).softmax(1)[0]
     confidence, class_id = scores.max(0)
     prediction = dict(class_id=int(class_id), confidence=float(confidence), box=box)
+    top_scores, top_ids = scores.topk(min(4, scores.numel()))
+    matches = [dict(class_id=int(index), confidence=float(score))
+               for score, index in zip(top_scores, top_ids)]
     if prediction['confidence'] < policy['classifier_threshold']:
-        return dict(accepted=False, reason='crop classifier low confidence', prediction=prediction, crop=crop, detector=detected)
-    return dict(accepted=True, reason='accepted', prediction=prediction, crop=crop, detector=detected)
+        return dict(accepted=False, reason='crop classifier low confidence', prediction=prediction,
+                    matches=matches, crop=crop, detector=detected)
+    return dict(accepted=True, reason='accepted', prediction=prediction,
+                matches=matches, crop=crop, detector=detected)

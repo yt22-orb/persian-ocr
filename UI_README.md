@@ -6,18 +6,23 @@ The UI follows this flow:
 2. Capture/select one isolated Persian letter.
 3. Review the full image and choose **Retake** or **Scan**.
 4. The processing dialog stays visible while the model runs.
-5. A successful scan shows the Persian letter, transliteration, confidence, and **Copy text** action. Model and recognition failures appear as retry/home dialogs.
+5. A successful scan shows the Persian letter, transliteration, crop-classifier confidence, four ranked model scores, and **Copy Text**. Model and recognition failures appear as retry/home dialogs.
 
 ## Run in VS Code
 
-Open the repository folder in VS Code, then use its integrated terminal:
+Open the repository folder in VS Code, then use its integrated terminal. Use Python 3.12 or 3.13 and install the UI dependencies:
 
-```powershell
-py -m pip install -r requirements-ui.txt
-py serve_ui.py
+```sh
+python -m pip install -r requirements-ui.txt
 ```
 
-Open `http://127.0.0.1:8501` if it does not open automatically.
+Download `yolo11n.pt` from [release v1.0.2](https://github.com/yt22-orb/persian-ocr/releases/tag/v1.0.2) and put it in the repository root. The crop classifier checkpoint is already in `artifacts/crop_cnn/best.pt`. Start the server:
+
+```sh
+python serve_ui.py
+```
+
+Open `http://127.0.0.1:8501` if it does not open automatically. The endpoint uses the same confidence-gated YOLO and crop-classifier pipeline as the Colab notebook. CPU inference is supported; the first scan also loads both models and can take longer.
 
 The server looks for the trained detector at the first matching location:
 
@@ -26,7 +31,7 @@ The server looks for the trained detector at the first matching location:
 - `artifacts/yolo11n.pt`;
 - `models/yolo11n.pt`.
 
-The current source archive does not contain `yolo11n.pt`. Until that published checkpoint is added, the interface deliberately shows the **Model can’t load** dialog after Scan.
+The source archive does not contain `yolo11n.pt`. Until that published checkpoint is added locally, the interface shows the **Model can’t load** dialog after a scan.
 
 ## UI files
 

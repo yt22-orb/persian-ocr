@@ -256,7 +256,7 @@ h2 {
   object-fit: contain;
   background: var(--pink-light);
 }
-.camera-frame video { object-fit: cover; transform: scaleX(-1); }
+.camera-frame video { object-fit: cover; }
 
 .camera-placeholder {
   position: absolute;

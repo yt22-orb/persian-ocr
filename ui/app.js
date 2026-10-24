@@ -32,6 +32,7 @@
   let cameraStream = null;
   let lastFocusedElement = null;
   let toastTimer = null;
+  let scanInProgress = false;
 
   function showScreen(name) {
     activeScreen = name;
@@ -131,8 +132,6 @@
     captureCanvas.width = camera.videoWidth;
     captureCanvas.height = camera.videoHeight;
     const context = captureCanvas.getContext("2d");
-    context.translate(captureCanvas.width, 0);
-    context.scale(-1, 1);
     context.drawImage(camera, 0, 0);
     captureCanvas.toBlob((blob) => {
       if (!blob) {
@@ -218,24 +217,25 @@
   }
 
   async function scanImage() {
+    if (scanInProgress) return;
     if (!selectedImage) {
       showError("No image selected", "Take or upload an image before scanning.");
       return;
     }
 
+    scanInProgress = true;
     showProcessing(true);
     const started = performance.now();
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 30000);
     try {
       const image = await getScanBlob();
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 30000);
       const response = await fetch("/api/predict", {
         method: "POST",
         headers: { "Content-Type": image.type || "image/jpeg" },
         body: image,
         signal: controller.signal,
       });
-      window.clearTimeout(timeout);
       const payload = await response.json().catch(() => ({}));
       const remaining = Math.max(0, 850 - (performance.now() - started));
       await new Promise((resolve) => window.setTimeout(resolve, remaining));
@@ -253,6 +253,9 @@
         timedOut ? "Scan timed out" : "Model can’t load",
         timedOut ? "The model took too long to respond. Please try again." : "Start the UI with serve_ui.py, then try again.", "retry"
       );
+    } finally {
+      window.clearTimeout(timeout);
+      scanInProgress = false;
     }
   }
 
@@ -272,7 +275,9 @@
 
   function showResult(matches) {
     const [main] = matches;
-    const percent = (confidence) => `${(confidence * 100).toFixed(1)}%`;
+    const percent = (confidence) => confidence > 0 && confidence < 0.0005
+      ? "<0.1%"
+      : `${(confidence * 100).toFixed(1)}%`;
     resultLetter.textContent = main.letter;
     resultName.textContent = main.transliteration;
     resultConfidence.textContent = percent(main.confidence);
@@ -312,15 +317,18 @@
   }
 
   function retake() {
+    const previousSource = source;
     closeError();
     resetAll();
-    openCamera();
+    showScreen("home");
+    if (previousSource === "upload") setTab("upload");
+    else openCamera();
   }
 
   document.addEventListener("click", (event) => {
     const control = event.target.closest("[data-action]");
     if (!control) return;
-        const actions = {
+    const actions = {
       "open-camera": openCamera,
       "open-upload": () => { stopCamera(); resetUpload(); setTab("upload"); },
       home: () => { closeError(); closeAlphabet(); resetAll(); setTab("camera"); showScreen("home"); },
