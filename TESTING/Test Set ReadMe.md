@@ -56,8 +56,8 @@ Everything added on the testing branch is inside TESTING:
 | run_test.py and Run Test.cmd | Batch evaluation with native folder selection or explicit paths |
 | labels.json and decision.json | Fixed class mapping and recognition policy |
 | requirements.txt | Python dependencies |
-| build_report.py | Rebuild one merged report from completed test results |
-| Reports.docx | One document containing the interpretation and all four completed reports |
+| build_report.py and error_analysis.py | Rebuild one merged report and its error analysis from completed test results |
+| Reports.docx | One document containing the interpretation, all four completed reports, and the error analysis of transformations, fonts, letters, and confidence thresholds |
 | Results | Recorded per-image CSVs, per-letter/category metrics, and run metadata |
 
 DatasetZip.zip is stored using [Git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage). Install Git LFS before cloning, or run these commands in your existing clone:

@@ -1,4 +1,4 @@
-"""Build one merged Word report with interpretation and four dataset sections."""
+"""Build one merged Word report with interpretation, four datasets, and error analysis."""
 from pathlib import Path
 import argparse
 import csv
@@ -220,6 +220,8 @@ def build(folder, output=None):
         for element in section.element.body:
             if element.tag != qn('w:sectPr'):
                 merged.element.body.insert(len(merged.element.body)-1,deepcopy(element))
+    from error_analysis import append_error_analysis
+    append_error_analysis(merged,folder,table)
     merged.core_properties.author='Jeff Barrientos'
     merged.core_properties.last_modified_by='Jeff Barrientos'
     merged.core_properties.title='Persian Letter Recognition Test Reports'
