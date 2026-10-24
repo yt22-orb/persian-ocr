@@ -2,6 +2,7 @@
   "use strict";
 
   const MAX_BYTES = 10 * 1024 * 1024;
+  const ALPHABET = "ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی".split(" ");
   const screens = [...document.querySelectorAll("[data-screen]")];
   const camera = document.querySelector("#camera");
   const cameraPlaceholder = document.querySelector("#camera-placeholder");
@@ -9,7 +10,6 @@
   const captureCanvas = document.querySelector("#capture-canvas");
   const dropZone = document.querySelector("#drop-zone");
   const fileInput = document.querySelector("#file-input");
-  const uploadButton = document.querySelector("#upload-button");
   const uploadThumbnail = document.querySelector("#upload-thumbnail");
   const fileName = document.querySelector("#file-name");
   const previewImage = document.querySelector("#preview-image");
@@ -21,7 +21,10 @@
   const resultName = document.querySelector("#result-name");
   const resultConfidence = document.querySelector("#result-confidence");
   const toast = document.querySelector("#toast");
-
+  const resultImage = document.querySelector("#result-image");
+  const matchesList = document.querySelector("#matches-list");
+  const alphabetGrid = document.querySelector("#alphabet-grid");
+ 
   let activeScreen = "home";
   let source = null;
   let selectedImage = null;
@@ -29,6 +32,7 @@
   let cameraStream = null;
   let lastFocusedElement = null;
   let toastTimer = null;
+  let scanInProgress = false;
 
   function showScreen(name) {
     activeScreen = name;
@@ -37,10 +41,23 @@
       screen.hidden = !isActive;
       screen.classList.toggle("screen--active", isActive);
     });
-    if (name !== "capture") stopCamera();
+    if (name !== "home") stopCamera();
     const heading = document.querySelector(`[data-screen="${name}"] h1`);
     heading?.focus?.({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setTab(name) {
+    document.querySelectorAll(".tab").forEach((tab) => {
+      const on = tab.dataset.action === `open-${name}`;
+      tab.classList.toggle("tab--active", on);
+      tab.setAttribute("aria-selected", String(on));
+    });
+    document.querySelectorAll(".pane").forEach((pane) => { pane.hidden = pane.id !== `${name}-pane`; });
+  }
+
+  function closeAlphabet() {
+    document.body.classList.remove("alphabet-open");
   }
 
   function setImage(blob, origin) {
@@ -49,17 +66,17 @@
     selectedImageUrl = URL.createObjectURL(blob);
     source = origin;
     previewImage.src = selectedImageUrl;
+    previewImage.classList.remove("is-flipped");
   }
 
   function resetUpload() {
     fileInput.value = "";
-    uploadButton.disabled = true;
     fileName.textContent = "No image selected";
     uploadThumbnail.innerHTML = '<svg viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="5"/><circle cx="23" cy="24" r="4"/><path d="m14 47 12-12 8 8 7-7 9 11"/></svg>';
   }
 
-  function resetAll() {
-    stopCamera();
+  function resetAll(keepCamera = false) {
+    if (!keepCamera) stopCamera();
     if (selectedImageUrl) URL.revokeObjectURL(selectedImageUrl);
     selectedImage = null;
     selectedImageUrl = null;
@@ -70,7 +87,8 @@
 
   async function openCamera() {
     source = "capture";
-    showScreen("capture");
+    setTab("camera");
+    if (cameraStream) return;
     captureButton.disabled = true;
     cameraPlaceholder.hidden = false;
     cameraPlaceholder.querySelector("span").textContent = "Starting camera…";
@@ -103,6 +121,7 @@
     if (cameraStream) cameraStream.getTracks().forEach((track) => track.stop());
     cameraStream = null;
     camera.srcObject = null;
+    captureButton.disabled = true;
   }
 
   function capturePhoto() {
@@ -113,8 +132,6 @@
     captureCanvas.width = camera.videoWidth;
     captureCanvas.height = camera.videoHeight;
     const context = captureCanvas.getContext("2d");
-    context.translate(captureCanvas.width, 0);
-    context.scale(-1, 1);
     context.drawImage(camera, 0, 0);
     captureCanvas.toBlob((blob) => {
       if (!blob) {
@@ -122,7 +139,6 @@
         return;
       }
       setImage(blob, "capture");
-      showScreen("preview");
     }, "image/jpeg", 0.92);
   }
 
@@ -144,7 +160,6 @@
       await verifyImage(file);
       setImage(file, "upload");
       fileName.textContent = file.name;
-      uploadButton.disabled = false;
       uploadThumbnail.innerHTML = "";
       const thumbnail = document.createElement("img");
       thumbnail.src = selectedImageUrl;
@@ -175,10 +190,11 @@
     else document.body.removeAttribute("aria-busy");
   }
 
-  function showError(title, message) {
+  function showError(title, message, mode = "close") {
     lastFocusedElement = document.activeElement;
     errorTitle.textContent = title;
     errorMessage.textContent = message;
+    errorModal.dataset.mode = mode;
     errorModal.hidden = false;
     errorModal.querySelector(".modal-close").focus();
   }
@@ -190,34 +206,36 @@
 
   function handleApiError(status, payload) {
     if (status === 422 || payload?.code === "unrecognized") {
-      showError("Could not recognize letter", payload?.message || "Please try again with a clearer picture.");
+      showError("Could not recognize letter", payload?.message || "Please try again with a clearer picture.", "retake");
       return;
     }
     if (status === 503 || payload?.code === "model_unavailable") {
-      showError("Model can’t load", payload?.message || "The model is not available right now.");
+      showError("Model can’t load", payload?.message || "The model is not available right now.", "retry");
       return;
     }
-    showError("Scan failed", payload?.message || "Something went wrong while scanning. Please try again.");
+    showError("Scan failed", payload?.message || "Something went wrong while scanning. Please try again.", "retry");
   }
 
   async function scanImage() {
+    if (scanInProgress) return;
     if (!selectedImage) {
       showError("No image selected", "Take or upload an image before scanning.");
       return;
     }
 
+    scanInProgress = true;
     showProcessing(true);
     const started = performance.now();
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 30000);
     try {
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 30000);
+      const image = await getScanBlob();
       const response = await fetch("/api/predict", {
         method: "POST",
-        headers: { "Content-Type": selectedImage.type || "image/jpeg" },
-        body: selectedImage,
+        headers: { "Content-Type": image.type || "image/jpeg" },
+        body: image,
         signal: controller.signal,
       });
-      window.clearTimeout(timeout);
       const payload = await response.json().catch(() => ({}));
       const remaining = Math.max(0, 850 - (performance.now() - started));
       await new Promise((resolve) => window.setTimeout(resolve, remaining));
@@ -227,18 +245,51 @@
         handleApiError(response.status, payload);
         return;
       }
-      resultLetter.textContent = payload.letter;
-      resultName.textContent = `[${payload.transliteration}]`;
-      resultConfidence.textContent = `Confidence ${(payload.confidence * 100).toFixed(1)}%`;
-      showScreen("result");
+      showResult(payload.matches || [payload]);
     } catch (error) {
       showProcessing(false);
       const timedOut = error?.name === "AbortError";
       showError(
         timedOut ? "Scan timed out" : "Model can’t load",
-        timedOut ? "The model took too long to respond. Please try again." : "Start the UI with serve_ui.py, then try again."
+        timedOut ? "The model took too long to respond. Please try again." : "Start the UI with serve_ui.py, then try again.", "retry"
       );
+    } finally {
+      window.clearTimeout(timeout);
+      scanInProgress = false;
     }
+  }
+
+  async function getScanBlob() {
+    if (!previewImage.classList.contains("is-flipped")) return selectedImage;
+    const bitmap = await createImageBitmap(selectedImage);
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const context = canvas.getContext("2d");
+    context.translate(canvas.width, 0);
+    context.scale(-1, 1);
+    context.drawImage(bitmap, 0, 0);
+    const type = selectedImage.type === "image/png" ? "image/png" : "image/jpeg";
+    return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob || selectedImage), type, 0.92));
+  }
+
+  function showResult(matches) {
+    const [main] = matches;
+    const percent = (confidence) => confidence > 0 && confidence < 0.0005
+      ? "<0.1%"
+      : `${(confidence * 100).toFixed(1)}%`;
+    resultLetter.textContent = main.letter;
+    resultName.textContent = main.transliteration;
+    resultConfidence.textContent = percent(main.confidence);
+    resultConfidence.parentElement.style.setProperty("--value", percent(main.confidence));
+    resultImage.src = selectedImageUrl;
+    resultImage.classList.toggle("is-flipped", previewImage.classList.contains("is-flipped"));
+    matchesList.innerHTML = matches.slice(0, 4).map((match) => `<li class="match"><span class="match__letter" lang="fa" dir="rtl">${match.letter}</span><span class="match__name">${match.transliteration}</span><span class="match__score">${percent(match.confidence)}</span></li>`).join("");
+    alphabetGrid.querySelectorAll(".alphabet-tile").forEach((tile) => {
+      tile.classList.toggle("alphabet-tile--main", tile.textContent === main.letter);
+      tile.classList.toggle("alphabet-tile--match", matches.slice(1).some((match) => match.letter === tile.textContent));
+    });
+    showScreen("result");
   }
 
   async function copyResult() {
@@ -266,12 +317,12 @@
   }
 
   function retake() {
+    const previousSource = source;
     closeError();
-    if (source === "capture") openCamera();
-    else {
-      resetUpload();
-      showScreen("upload");
-    }
+    resetAll();
+    showScreen("home");
+    if (previousSource === "upload") setTab("upload");
+    else openCamera();
   }
 
   document.addEventListener("click", (event) => {
@@ -279,13 +330,17 @@
     if (!control) return;
     const actions = {
       "open-camera": openCamera,
-      "open-upload": () => { source = "upload"; resetUpload(); showScreen("upload"); },
-      home: () => { closeError(); resetAll(); showScreen("home"); },
+      "open-upload": () => { stopCamera(); resetUpload(); setTab("upload"); },
+      home: () => { closeError(); closeAlphabet(); resetAll(); setTab("camera"); showScreen("home"); },
       capture: capturePhoto,
-      "confirm-upload": () => selectedImage ? showScreen("preview") : showError("No image selected", "Choose an image first."),
+      flip: () => previewImage.classList.toggle("is-flipped"),
+      clear: () => resetAll(true),
       retake,
+      retry: () => { closeError(); scanImage(); },
       scan: scanImage,
       copy: copyResult,
+      "open-alphabet": () => document.body.classList.add("alphabet-open"),
+      "close-alphabet": closeAlphabet,
       "close-error": closeError,
     };
     actions[control.dataset.action]?.();
@@ -310,8 +365,9 @@
   errorModal.addEventListener("click", (event) => { if (event.target === errorModal) closeError(); });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !errorModal.hidden) closeError();
+    if (event.key === "Escape") closeAlphabet();
     if (event.key === "Tab" && !errorModal.hidden) {
-      const focusable = [...errorModal.querySelectorAll("button:not(:disabled)")];
+      const focusable = [...errorModal.querySelectorAll("button:not(:disabled)")].filter((el) => el.offsetParent !== null);
       const first = focusable[0];
       const last = focusable.at(-1);
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
@@ -319,6 +375,8 @@
     }
   });
 
+  alphabetGrid.innerHTML = ALPHABET.map((letter) => `<li class="alphabet-tile" lang="fa">${letter}</li>`).join("");
+  
   window.addEventListener("beforeunload", () => {
     stopCamera();
     if (selectedImageUrl) URL.revokeObjectURL(selectedImageUrl);

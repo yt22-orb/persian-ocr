@@ -25,8 +25,7 @@ MAX_BYTES = 10 * 1024 * 1024
 HOST = os.environ.get("PERSIAN_OCR_HOST", "127.0.0.1")
 PORT = int(os.environ.get("PERSIAN_OCR_PORT", "8501"))
 
-_model: Any = None
-_model_error: Exception | None = None
+_models: tuple[Any, Any] | None = None
 _model_lock = threading.Lock()
 
 
@@ -41,47 +40,58 @@ def _checkpoint_path() -> Path | None:
     return next((path.resolve() for path in candidates if path and path.is_file()), None)
 
 
-def _load_model():
-    global _model, _model_error
-    if _model is not None:
-        return _model
+def _load_models(device: str):
+    global _models
+    if _models is not None:
+        return _models
     with _model_lock:
-        if _model is not None:
-            return _model
+        if _models is not None:
+            return _models
         checkpoint = _checkpoint_path()
         if checkpoint is None:
             raise FileNotFoundError(
-                "The YOLO checkpoint was not found. Add yolo11n.pt to the project root, "
-                "artifacts/, or models/, then try again."
+                "The YOLO checkpoint was not found. Download yolo11n.pt from the "
+                "project's v1.0.2 release and add it to the project root, artifacts/, "
+                "or models/, then try again."
             )
+        crop_checkpoint = ROOT / "artifacts" / "crop_cnn" / "best.pt"
+        if not crop_checkpoint.is_file():
+            raise FileNotFoundError("The crop classifier checkpoint was not found.")
         try:
+            import torch
             from ultralytics import YOLO
+            from persian_ocr.crop_cnn import CropLetterCNN
 
-            _model = YOLO(str(checkpoint))
-            _model_error = None
-            return _model
+            detector = YOLO(str(checkpoint))
+            classifier = CropLetterCNN(dropout=0.25).to(device)
+            weights = torch.load(crop_checkpoint, map_location=device, weights_only=True)
+            classifier.load_state_dict(weights["state_dict"])
+            classifier.eval()
+            _models = detector, classifier
+            return _models
         except Exception as exc:  # Model/library errors are returned as a UI-safe message.
-            _model_error = exc
-            raise RuntimeError("The OCR model could not be loaded.") from exc
+            raise RuntimeError("The OCR models could not be loaded.") from exc
 
 
 def _predict(data: bytes) -> dict[str, Any]:
     import torch
 
-    from persian_ocr.inference import decode_upload, predict
+    from persian_ocr.crop_cnn import predict_crop_pipeline
+    from persian_ocr.inference import decode_upload
 
     labels = json.loads((ROOT / "configs" / "labels.json").read_text(encoding="utf-8"))
-    policy = json.loads((ROOT / "configs" / "decision.json").read_text(encoding="utf-8"))
+    policy = json.loads((ROOT / "configs" / "crop_pipeline_decision.json").read_text(encoding="utf-8"))
     image = decode_upload(data)
-    model = _load_model()
-    device: int | str = 0 if torch.cuda.is_available() else "cpu"
-    outcome = predict(model, image, policy, device=device)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    detector, classifier = _load_models(device)
+    outcome = predict_crop_pipeline(detector, classifier, image, policy, device=device)
     if not outcome.get("accepted"):
         reason = outcome.get("reason", "unrecognized input")
         messages = {
             "zero detections": "No isolated Persian letter was found. Try a clearer, tighter picture.",
             "multiple letters": "More than one letter was found. Show exactly one isolated letter.",
             "low confidence": "The letter is unclear. Improve the lighting or contrast and try again.",
+            "crop classifier low confidence": "The letter is unclear. Improve the lighting or contrast and try again.",
         }
         return {
             "accepted": False,
@@ -98,6 +108,14 @@ def _predict(data: bytes) -> dict[str, Any]:
         "transliteration": label["transliteration"],
         "codepoint": label["codepoint"],
         "confidence": float(candidate["confidence"]),
+        "matches": [
+            {
+                "letter": labels[item["class_id"]]["letter"],
+                "transliteration": labels[item["class_id"]]["transliteration"],
+                "confidence": item["confidence"],
+            }
+            for item in outcome["matches"]
+        ],
     }
 
 

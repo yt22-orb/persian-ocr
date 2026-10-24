@@ -4,7 +4,9 @@ A 32-class Persian character recognition project. The Colab workflow uses fine-t
 
 ## What was built
 
-The target is one complete, isolated Persian letter per image, including its dots. The detector has 32 classes, from alef through yeh. The project also includes a three-block CNN to compare detection against single-label classification, validation-only decision calibration, a Streamlit upload demo, synthetic stress evaluation, and reports for provenance and visual review.
+The target is one complete, isolated Persian letter per image, including its dots. The detector has 32 classes, from alef through yeh. The project also includes a three-block CNN to compare detection against single-label classification, validation-only decision calibration, a local web upload demo, synthetic stress evaluation, and reports for provenance and visual review.
+
+The local camera/upload interface runs the same detector and crop classifier as the Colab notebook. See [UI_README.md](UI_README.md) for setup and model download instructions.
 
 The experiment uses rendered typography, not natural handwriting. The results below describe this benchmark only; they are not estimates of real-world OCR accuracy.
 
