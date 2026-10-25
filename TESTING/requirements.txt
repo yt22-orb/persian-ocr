@@ -4,3 +4,4 @@ torchvision==0.29.1
 numpy
 Pillow
 python-docx
+opencv-python

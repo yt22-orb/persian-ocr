@@ -371,12 +371,16 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,default=Path(__file__).parent/'Runs'/datetime.now(timezone(timedelta(hours=8))).strftime('%Y%m%d_%H%M%S'))
     parser.add_argument('--batch',type=int,default=32)
     parser.add_argument('--device',default='auto')
+    parser.add_argument('--recognition',choices=('base','fallback'),default='fallback',
+                        help='Conditional fallback is the default; base reproduces the earlier detector-only test.')
+    parser.add_argument('--cache',type=Path,help='Optional signed detector-view cache shared by local retests.')
+    parser.add_argument('--no-controls',action='store_true',help='Skip the repository validation negative controls.')
+    parser.add_argument('--no-docx',action='store_true',help='Write CSV/JSON/Markdown without the optional Word report.')
     args=parser.parse_args()
     if args.batch < 1:
         parser.error('--batch must be at least 1.')
     if args.folders and len(args.folders) != 4:
         parser.error('Pass all four dataset folders, or omit them to use the folder pickers.')
-    from build_report import build
     model_path = args.model
     if model_path is None:
         candidate = Path(__file__).resolve().parent.parent / 'yolo11n.pt'
@@ -401,5 +405,15 @@ if __name__=='__main__':
     expected_names = NAMES
     if [Path(folder).name for folder in folders] != expected_names:
         parser.error('Select the four folders in this order: ' + ', '.join(expected_names))
-    run(model_path,args.labels,args.policy,folders,args.output,batch=args.batch,device=args.device)
-    build(args.output)
+    if args.recognition == 'fallback':
+        from fallback_runner import run as run_fallback
+        run_fallback(model_path,args.labels,args.policy,folders,args.output,batch=args.batch,device=args.device,
+                     cache_path=args.cache,include_controls=not args.no_controls)
+        if not args.no_docx:
+            from build_fallback_report import build
+            build(args.output)
+    else:
+        run(model_path,args.labels,args.policy,folders,args.output,batch=args.batch,device=args.device)
+        if not args.no_docx:
+            from build_report import build
+            build(args.output)

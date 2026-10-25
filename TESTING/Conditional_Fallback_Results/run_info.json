@@ -1,0 +1,47 @@
+{
+  "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab",
+  "policy": {
+    "candidate_floor": 0.03,
+    "acceptance_threshold": 0.8,
+    "nms_iou": 0.4,
+    "checkpoint_sha256": "1b82317638d84627ee1ca455bad970ce70041d12194b0fb9c7762c1ba51540ab"
+  },
+  "torch": "2.14.1+cu130",
+  "ultralytics": "8.4.172",
+  "precision": "FP32",
+  "batch_size": 32,
+  "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "opencv": "5.0.0",
+  "preprocessing_version": "conditional-fallback-v1",
+  "checkpoint": "C:\\Users\\Jeff Barrientos\\Downloads\\yolo11n.pt",
+  "labels_sha256": "ba8483c682099bb42257ca8ab415b08c6f5cd4e0589d2cb201e133fcec38e0e1",
+  "recognizer": "yolo",
+  "started_at": "2026-10-25T08:49:25.241709+08:00",
+  "status": "complete",
+  "cache_start_views": 0,
+  "fallback_order": [
+    "contrast",
+    "both",
+    "rotations"
+  ],
+  "recognition": "conditional-fallback",
+  "validation_controls": true,
+  "source_sha256": {
+    "TESTING\\preprocessing.py": "86826d490f9870fad9333f474ab4ac6ed03ef54adf7028c2a6d9a9472d97553d",
+    "TESTING\\run_test.py": "8e31e7940def2dfdd29195ac3c384dde60b9e345c08c4f28b0523c344e3a3721",
+    "TESTING\\fallback_runner.py": "d86e4c4e5976c313ee0f619158e976f86535deb477b3a9a1dd1318a0dcc5e854"
+  },
+  "protected_source_sha256": {
+    "serve_ui.py": "f82e85a1e15e2e1a120b9f61037dc7db8819a5497aa28134693acc31a8bc5b68",
+    "persian_ocr\\inference.py": "fdd01027e3ecac83015363e7af854bc186421bba974dcb09e20fd59085e6ca12",
+    "persian_ocr\\crop_cnn.py": "f020dff50d06812de1731ba1cc877a3ac8be0f8daaefaefd0d1bff8e486040d6",
+    "ui\\index.html": "d9e993efa85be432115c83e3f2210b06692e696e57fea0ed8e80d5fe39e5ea55",
+    "ui\\app.js": "f29f5282ce9c3666437fc6eb939530065365d4c1bbaaf2609925b9171e3fedf0",
+    "ui\\styles.css": "9352e126c8c0e9298b3d08109b04da61ecd89149a8a638cab06fcec3d5764a86"
+  },
+  "finished_at": "2026-10-25T11:10:14.322462+08:00",
+  "elapsed_seconds": 8449.076,
+  "new_detector_views": 981803,
+  "cache_total_views": 981803,
+  "inputs": 76672
+}

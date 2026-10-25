@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "positive_images": 76544,
+  "negative_controls": 128,
+  "decisions_independently_replayed": 76672,
+  "logical_model_views": 984096,
+  "fresh_unique_detector_views": 981803,
+  "accepted_BASE_predictions_changed": 0,
+  "BASE_multiple_rejections_changed": 0,
+  "input_identity_matches_prior_full_test": true,
+  "scanner_backend_and_UI_unchanged": true,
+  "fresh_cache": true,
+  "independent_metrics_match": true,
+  "datasets": [
+    {
+      "dataset": "DS1_Persian",
+      "images": 6272,
+      "previous_BASE_decision_differences": 0,
+      "base_accuracy": 69.53125,
+      "fallback_accuracy": 71.89094387755102
+    },
+    {
+      "dataset": "DS1_Persian_Smoke",
+      "images": 6272,
+      "previous_BASE_decision_differences": 0,
+      "base_accuracy": 47.97512755102041,
+      "fallback_accuracy": 63.026147959183675
+    },
+    {
+      "dataset": "DS2_Persian_Hand",
+      "images": 32000,
+      "previous_BASE_decision_differences": 0,
+      "base_accuracy": 2.61875,
+      "fallback_accuracy": 4.834375
+    },
+    {
+      "dataset": "DS2_Persian_Hand_Smoke",
+      "images": 32000,
+      "previous_BASE_decision_differences": 0,
+      "base_accuracy": 4.621875,
+      "fallback_accuracy": 13.284375
+    }
+  ],
+  "negative_control_results": [
+    {
+      "kind": "blank",
+      "images": "64",
+      "base_false_accepts": "0",
+      "fallback_false_accepts": "0"
+    },
+    {
+      "kind": "multiple",
+      "images": "64",
+      "base_false_accepts": "0",
+      "fallback_false_accepts": "0"
+    }
+  ],
+  "note": "The fallback order was chosen using earlier results on the same datasets; this is an implementation retest, not independent validation.",
+  "document_visual_review": "passed",
+  "document_pages": 6,
+  "document_review_note": "All six final pages reviewed; revised page 2 reviewed again and other five raster-identical to reviewed pages.",
+  "document_black_text_white_background": true,
+  "document_images": 0,
+  "author": "Jeff Barrientos",
+  "unit_tests_passed": 14,
+  "document_sha256": "2883d4ba162bf47d74fdd9dc345115cef7e0a280d1e2deb97b01e0b4ad4fa9ae",
+  "report_builder_sha256": "f8f366b7d961cd666213a0126f198d034c0e7b3f8aac214830a0ae973b671330",
+  "completed_at": "2026-10-25T11:14:40.310046+08:00"
+}

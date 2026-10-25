@@ -2,6 +2,20 @@
 
 Prepared by Jeff Barrientos.
 
+## Conditional fallback in the TESTING runner
+
+The `test-preprocessing-branch` defaults to conditional fallback in this batch runner. The browser scanner, its backend, and all UI files are unchanged. The earlier committed `Results` and `Reports.docx` remain the original BASE evidence; new runs go to their separate output folders.
+
+The runner tries BASE first. An accepted BASE answer is final, and a BASE multiple-letter rejection is final. Only no-detection or low-confidence BASE inputs are retried, in this order: contrast, contrast with eight rotations, then eight rotations without contrast. It stops at the first accepted stage. At rotation stages it chooses the highest-confidence accepted single-letter view, with the lower angle breaking equal-confidence ties. The 80% threshold is unchanged. If all stages fail, it retains the original BASE rejection.
+
+Contrast converts to grayscale, normalizes the 90th-percentile paper level toward white, then applies CLAHE with clip limit 2.0 and a 4 by 4 tile grid. Rotations are 0, 45, 90, 135, 180, 225, 270 and 315 degrees counterclockwise. Right angles use lossless transposes; diagonals use bicubic interpolation and an expanded white canvas. Zero-degree results are reused, so at most 16 detector views are needed per image. Input files are never overwritten.
+
+The new `selected_method`, `selected_angle_degrees`, `recovered`, `needs_review`, `attempted_methods`, and `trace_json` columns explain each fallback decision. The BASE prediction and correctness are also retained in every row for paired comparisons. Accepted fallback predictions have `needs_review=yes`; a high model score does not guarantee a correct answer. The new Word report compares BASE and fallback on the same images and reports both additional correct and additional wrong accepted answers.
+
+Existing run commands below now run fallback by default. Add `--recognition base` to reproduce the original detector-only workflow. Add `--no-docx` to omit the optional Word report. The full repository also supplies 64 blank and 64 two-letter validation controls; if only TESTING was copied, these controls are skipped with a message. Keep `preprocessing.py`, `fallback_runner.py`, and `build_fallback_report.py` beside `run_test.py`. Reinstall `requirements.txt` to ensure OpenCV is available.
+
+The completed 25 October 2026 local comparison is in [Conditional Fallback Results](Conditional_Fallback_Results/ReadMe.md), including the merged Word report, summary CSVs, validation record, and full downloadable evidence ZIP. The original four datasets were tested in full, with zero technical errors and all 128 synthetic controls rejected. Run `python -m unittest discover -s TESTING/tests -v` from the repository root for the ten fallback checks; the four existing API checks remain under `tests`. Mirrored-image checks are recorded in [Future Work](FUTURE_WORK.md) and remain deferred.
+
 This folder tests the separately supplied Persian letter recognizer on two source datasets, each with an unmodified and a modified version. There are four input folders and 76,544 image evaluations in total. The script loads the supplied `yolo11n.pt`, checks its checksum and its 32 class names against `labels.json`, and produces one CSV row per image plus a report for each folder.
 
 ## The two source datasets
@@ -89,7 +103,7 @@ python -m venv .venv
 
 Choose the four extracted folders when prompted, in the displayed order. Replace the example checkpoint path with your trained model file. On the original device that file was in Downloads as yolo11n.pt. The required SHA256 is shown above; the script rejects a different checkpoint or a mismatched class mapping. Putting the model in the repository root as yolo11n.pt also works, and the runner finds it automatically. Keep model files out of commits.
 
-Run Test.cmd tries TESTING/.venv, then the repository .venv, then python on PATH. If no model is found in the repository root, the interactive runner opens a model file picker. Dependencies must already be installed in the selected environment.
+Run Test.cmd tries TESTING/.venv, then the prepared local GPU environment at ../../work/ocr_eval_env when present, then the repository .venv, then python on PATH. If no model is found in the repository root, the interactive runner opens a model file picker. Dependencies must already be installed in the selected environment.
 
 For explicit folder paths, run:
 

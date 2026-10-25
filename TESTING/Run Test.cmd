@@ -3,6 +3,8 @@ setlocal
 cd /d "%~dp0"
 if exist "%~dp0.venv\Scripts\python.exe" (
   "%~dp0.venv\Scripts\python.exe" "%~dp0run_test.py"
+) else if exist "%~dp0..\..\work\ocr_eval_env\Scripts\python.exe" (
+  "%~dp0..\..\work\ocr_eval_env\Scripts\python.exe" "%~dp0run_test.py"
 ) else if exist "%~dp0..\.venv\Scripts\python.exe" (
   "%~dp0..\.venv\Scripts\python.exe" "%~dp0run_test.py"
 ) else (
